@@ -59,3 +59,97 @@ export default defineConfig({
     ],
 });
 ```
+
+## Инициализация Vue
+
+Теперь давайте сделаем все необходимое, чтобы запустить наше приложение. 
+Для начала добавим первый .vue компонент, который будет выступать основным шаблоном для нашего приложения. Я добавлю его сюда - `resources/js/vue/App.vue`.
+
+Вот его код, чтобы вам было не скучно:
+
+```vue
+<template>
+  <h1>Hello, world!</h1>
+</template>
+
+<script>
+export default {
+  name: "App"
+}
+</script>
+```
+
+Теперь откроем `resources/js/app.js` и добавим немного кода.
+
+```javascript
+import './bootstrap';
+
+// импортируем экземпляр Vue приложения
+import { createApp } from 'vue';
+
+// наш тот самый первый компонент
+import App from './vue/App.vue';
+
+// и немного дефолтных мелочей
+const app = createApp(App)
+app.mount('#app')
+```
+
+Последнее - это добавление нашего скрипта на саму страничку. С появлением Vite появилась и директива `@vite()`, которая нам сейчас пригодится.
+
+Возьмем `welcome.blade.php` и напишем в нем вот такой код:
+
+```html
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<!-- элемент, в котором будет Vue приложение -->
+<div id="app"></div>
+<!-- импорт всего необходимого через Vite -->
+@vite('resources/js/app.js')
+</body>
+</html>
+```
+
+## Запуск приложения
+
+Я покажу на примере `php artisan serve`, потому-что это очень распространенный вариант, однако это также хорошо работает и c [Laravel Sail](https://laravel.com/docs/9.x/sail), который я использую постоянно.
+
+Выполняем команду:
+
+```shell
+npm run dev
+```
+
+На экране появится нечто подобное:
+
+```text
+  VITE v4.0.3  ready in 212 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+  ➜  press h to show help
+
+  LARAVEL v9.45.1  plugin v0.7.3
+
+  ➜  APP_URL: http://localhost
+```
+
+Наверняка вас интересует что это такое - `http://localhost:5174`. Как вы могли догадаться это далеко не наше приложение, а _...the Vite development server that provides Hot Module Replacement for your Laravel application..._ Именно эта штука обеспечивает супер быструю горячую перезагрузку после редактирования кода, а также через этот хост подтягиваются все скрипты и стили. 
+
+Непосредственно нашего приложения это - `APP_URL`. Его нужно подкорректировать, указав тот хост, который мы получим после запуска с помощью `php artisan serve`. Как правило, это - `http://127.0.0.1:8000`.
+
+Когда мы настроили конфиг, запустили `npm run dev` и `php artisan serve` - наше приложение готово к работе. Попробуйте изменить что-нибудь в `App.vue` и проверить горячую перезагрузку.
+
+## Vue Router
+_Coming soon.._
+## Vuex
+_Coming soon.._
+## TypeScript
+_Coming soon.._
