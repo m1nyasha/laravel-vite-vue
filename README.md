@@ -91,8 +91,8 @@ import { createApp } from 'vue';
 import App from './vue/App.vue';
 
 // и немного дефолтных мелочей
-const app = createApp(App)
-app.mount('#app')
+createApp(App)
+    .mount('#app')
 ```
 
 Последнее - это добавление нашего скрипта на саму страничку. С появлением Vite появилась и директива `@vite()`, которая нам сейчас пригодится.
@@ -170,7 +170,119 @@ export default defineConfig({
 });
 ```
 ## Vue Router
-_Coming soon.._
+Для начала установим сам Vue Router.
+
+```shell
+npm i vue-router@4
+```
+Теперь в папку `src` добавим все необходимое, чтобы наш маршрутизатор заработал. Я создал папку `router` и поместил в нее несколько файликов:
+
+- `index.js` - это будет сам роутер, где мы задаем конфигурацию и т.п.
+- `routes.js` - тут мы будем хранить сами маршруты
+
+А также сразу добавлю несколько страниц в папку `pages`, которые по своей сути обычные vue-компоненты.
+
+Пример:
+
+```vue
+<template>
+  Home page
+</template>
+
+<script>
+export default {
+  name: 'Home'
+}
+</script>
+```
+Итого получаем вот такую структуру файлов:
+
+```
+├── App.vue
+├── pages
+│   ├── about.vue
+│   └── home.vue
+└── router
+    ├── index.js
+    └── routes.js
+```
+Для начала опишем наши маршруты в файле `router/routes.js`
+
+```js
+import Home from '../pages/home.vue'
+import About from "../pages/about.vue";
+
+export default [
+    {
+        path: '/',
+        name: 'Home',
+        component: Home,
+    },
+    {
+        path: '/about',
+        name: 'About',
+        component: About,
+    },
+]
+```
+
+Теперь вернемся к `router/index.js` и закончим настройку нашего роутера.
+
+```js
+import {createWebHistory, createRouter} from 'vue-router';
+import routes from './routes'
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+});
+
+export default router;
+```
+
+Я не буду пояснять за каждую строчку, так как это обычная инициализация vue-router, как и в других приложениях.
+
+Осталось самое главное - заюзать наш роутер в самом Vue. Для этого откроем `resources/js/app.js` и немного подредактируем:
+
+```diff
+import { createApp } from 'vue';
+import App from './src/App.vue';
++import router from './src/router';
+
+createApp(App)
++   .use(router)
+    .mount('#app')
+```
+
+`App.vue` также нужно поправить, потому-что ему не хватает `<router-view>` + я сразу добавлю ссылки с помощью `<router-link>`, чтобы проверить работоспособность.
+
+```vue
+<template>
+	<ul>
+		<li><router-link to="/">Home</router-link></li>
+		<li><router-link to="/about">About</router-link></li>
+	</ul>
+	<router-view />
+</template>
+
+<script>
+export default {
+	name: "App"
+}
+</script>
+```
+
+Вау! Теперь у нас есть роутер. Но что будет, если мы перейдем на страничку `/about` и обновим ее? Вероятно вы получите 404 ответ. Чтобы такого не происходило, нам нужно все запросы проксировать на наш `welcome.blade.php`, то есть на тот файл, в котором запускается наше Vue приложение. Откроем `routes/web.php` и слегка поправим наш маршрут.
+
+```php
+<?php
+
+Route::get('{any?}', function () {
+    return view('welcome');
+})->where('any', '.*');
+```
+
+Вот теперь другое дело!
 ## Vuex
 _Coming soon.._
 ## TypeScript
