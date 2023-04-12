@@ -180,7 +180,7 @@ npm i vue-router@4
 - `index.js` - это будет сам роутер, где мы задаем конфигурацию и т.п.
 - `routes.js` - тут мы будем хранить сами маршруты
 
-А также сразу добавлю несколько страниц в папку `pages`, которые по своей сути обычные vue-компоненты.
+Я также сразу добавлю несколько страниц в папку `pages`, которые по своей сути обычные vue-компоненты.
 
 Пример:
 
@@ -210,7 +210,7 @@ export default {
 
 ```js
 import Home from '../pages/home.vue'
-import About from "../pages/about.vue";
+import About from '../pages/about.vue';
 
 export default [
     {
@@ -258,16 +258,16 @@ createApp(App)
 
 ```vue
 <template>
-	<ul>
-		<li><router-link to="/">Home</router-link></li>
-		<li><router-link to="/about">About</router-link></li>
-	</ul>
-	<router-view />
+  <ul>
+    <li><router-link to="/">Home</router-link></li>
+    <li><router-link to="/about">About</router-link></li>
+  </ul>
+  <router-view />
 </template>
 
 <script>
 export default {
-	name: "App"
+  name: 'App'
 }
 </script>
 ```
