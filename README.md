@@ -147,6 +147,28 @@ npm run dev
 
 Когда мы настроили конфиг, запустили `npm run dev` и `php artisan serve` - наше приложение готово к работе. Попробуйте изменить что-нибудь в `App.vue` и проверить горячую перезагрузку.
 
+Если у вас ничего не работает (как это было у меня), то попробуйте немного дополнить ваш конфиг Vite.
+
+```diff
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
++    server: {
++        hmr: {
++            host: 'localhost',
++        },
++    },
+    plugins: [
+        vue(),
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+    ],
+});
+```
 ## Vue Router
 _Coming soon.._
 ## Vuex
